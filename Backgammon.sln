@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backgammon", "Backgammon.csproj", "{77A3DCCC-598E-4A6A-80C4-5F3372C2719C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77A3DCCC-598E-4A6A-80C4-5F3372C2719C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77A3DCCC-598E-4A6A-80C4-5F3372C2719C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77A3DCCC-598E-4A6A-80C4-5F3372C2719C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77A3DCCC-598E-4A6A-80C4-5F3372C2719C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B036B6C1-E9BC-4999-80E8-065DA724CACF}
+	EndGlobalSection
+EndGlobal
