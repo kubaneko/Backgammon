@@ -45,7 +45,7 @@ namespace Backgammon
             return dice2;
         }
 
-        public bool ValidMoveTo(Gamestate game,int from, int to)
+        public bool ValidMoveTo(Gamestate game, int to)
         {
             if (to > 23 || to < 0)
             {
@@ -65,7 +65,7 @@ namespace Backgammon
                 }
                 return false;
             }
-            if (game.GetTile((int)from + to) * game.GetColor() + 2 > 0)
+            if (game.GetTile(to) * game.GetColor() + 2 > 0)
             {
                 return true;
             }
@@ -76,6 +76,7 @@ namespace Backgammon
             int color = gamestate.GetColor();
             int firstindex = (24 + color) % 25;
             int lastindex= (24 - color) % 25;
+            ClearNext();
             // First Tile for the player (after bar)
             if (Selected == null)
             {
@@ -83,13 +84,16 @@ namespace Backgammon
                 {
                     for (int i=firstindex;i*color<(lastindex+ color)*color; i += color)
                     {
-                        if (ExistsDiceMove(i, gamestate)&& color*lastindex>i*color)
+                        if (gamestate.GetTile(i)*color>0)
                         {
-                            NextMoves.Add(i);
-                        }
-                        else
-                        {
-                            NextMoves.Add(lastindex + color);
+                            if (ExistsDiceMove(i, gamestate) && color * lastindex > i * color)
+                            {
+                                NextMoves.Add(i);
+                            }
+                            else
+                            {
+                                NextMoves.Add(lastindex + color);
+                            }
                         }
                     }
                 }
@@ -119,11 +123,13 @@ namespace Backgammon
             {
                 if ((firstindex - color) * color < to)
                 {
-                    state.MoveFromBar(to);
+                    state.Move((int)Selected, to);
+
                 }
                 else
                 {
-                    state.Move((int)Selected,to);
+                    state.MoveFromBar(to);
+
                 }
             }
             NullDice((int)Selected,to,color);
@@ -141,11 +147,11 @@ namespace Backgammon
         bool ExistsDiceMove(int From,Gamestate gamestate)
         {
 
-            if (dice1 != null && ValidMoveTo(gamestate, From,From + (int) dice1 * gamestate.GetColor()))
+            if (dice1 != null && ValidMoveTo(gamestate,From + (int) dice1 * gamestate.GetColor()))
             {
                 return true;
             }
-            if (dice2 != null && ValidMoveTo(gamestate, From,From + (int)dice2 * gamestate.GetColor()))
+            if (dice2 != null && ValidMoveTo(gamestate,From + (int)dice2 * gamestate.GetColor()))
             {
                 return true;
             }
@@ -153,18 +159,18 @@ namespace Backgammon
         }
         void GetDiceMoves(int From, Gamestate gamestate, HashSet<int> moves)
         {
-            if (dice1 != null && ValidMoveTo(gamestate, From,From + (int)dice1 * gamestate.GetColor()))
+            if (dice1 != null && ValidMoveTo(gamestate,From + (int)dice1 * gamestate.GetColor()))
             {
                 moves.Add(From + (int)dice1 * gamestate.GetColor());
             }
-            if (Double == 0 && dice2 != null && ValidMoveTo(gamestate, From,From + (int)dice2 * gamestate.GetColor()))
+            if (Double == 0 && dice2 != null && ValidMoveTo(gamestate,From + (int)dice2 * gamestate.GetColor()))
             {
-                moves.Add(From + (int)dice1 * gamestate.GetColor());
+                moves.Add(From + (int)dice2 * gamestate.GetColor());
             }
         }
         void NullDice(int From, int To, int color)
         {
-            if (Double != 0)
+            if (Double == 0)
             {
                 if (dice1 == null)
                 {
@@ -200,7 +206,7 @@ namespace Backgammon
         }
         public bool RemainMoves()
         {
-            return NextMoves.Count == 0;
+            return NextMoves.Count != 0;
         }
         public int NewToPlay()
         {
@@ -219,7 +225,7 @@ namespace Backgammon
         }
         public void ClearNext()
         {
-           // NextMoves.Clear();
+           NextMoves.Clear();
         }
         public int? GetSelected()
         {

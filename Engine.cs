@@ -209,7 +209,7 @@ namespace Backgammon
         private void DrawStress(Graphics g, Color ToS, int j)
         {
             Rectangle rect = new Rectangle((int)Math.Ceiling(xGetTileCoordinates(j)),
-                j < 12 ? 0 : (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder)),
+                j > 11 ? 0 : (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder)),
                 (int)Math.Floor(BoardSizex * xFractionOfStrip),
                 (int)Math.Floor(BoardSizey * yFractionOfBorder));
             using (Pen p = new Pen(ToS))

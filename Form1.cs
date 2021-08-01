@@ -100,7 +100,7 @@ namespace Backgammon
                         {
                             gamestate.Turn();
                             game.Turn();
-                            engine.SetTurn(TurnBox,gamestate.GetColor());
+                            engine.SetTurn(TurnBox, gamestate.GetColor());
                             label11.Text = "No more moves Your turn is over";
                         }
                     }
@@ -108,12 +108,29 @@ namespace Backgammon
                     {
                         game.SetSelected((int)x);
                         game.GenNextMoves(gamestate);
-                        engine.SetSelect(new HashSet<int> {(int)x},game.GetNextMoves());
-                        Render();
+                        engine.SetSelect(new HashSet<int> { (int)x }, game.GetNextMoves());
+                    }
+                }
+                else
+                {
+                    if (game.GetSelected() != null)
+                    {
+                        game.SetSelected(null);
+                        game.GenNextMoves(gamestate);
+                        engine.SetSelect(game.GetNextMoves(), null);
                     }
                 }
             }
-
+            else
+            {
+                    if (game.GetSelected() != null)
+                    {
+                        game.SetSelected(null);
+                        game.GenNextMoves(gamestate);
+                        engine.SetSelect(game.GetNextMoves(), null);
+                    }
+            }
+            Render();
 
         }
         void Render()
