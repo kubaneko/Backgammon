@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,10 +7,10 @@ namespace Backgammon
 {
     public class Engine
     {
-        HashSet<int> Select=new HashSet<int> ();
-        HashSet<int> ToSelect=new HashSet<int> ();
+        HashSet<int> Select = new HashSet<int>();
+        HashSet<int> ToSelect = new HashSet<int>();
         Bitmap white = Backgammon.Properties.Resources.WDot;
-        Bitmap black= Backgammon.Properties.Resources.BDot;
+        Bitmap black = Backgammon.Properties.Resources.BDot;
         System.Media.SoundPlayer player;
         Dictionary<int, Bitmap> dice = new Dictionary<int, Bitmap>
         {
@@ -25,7 +23,7 @@ namespace Backgammon
         };
         double xFractionOfStrip = (double)152 / 2048;
         double xFractionOfBorder = (double)87 / 2048;
-        double xFractionBar= (double)50 / 2048;
+        double xFractionBar = (double)50 / 2048;
         double yFractionOfBorder = (double)80 / 1449;
         double yFractionOfStrip = (double)(1449 - 160) / (2 * 1449);
         int BoardSizex;
@@ -34,21 +32,23 @@ namespace Backgammon
         int Border2;
         int yBorder;
         string info = "";
+        const int MAXTILE = 23;
+        const int MINTILE = 0;
 
         public Engine()
         {
             player = new System.Media.SoundPlayer(Backgammon.Properties.Resources.dice);
         }
 
-        public void RenderBoard(Gamestate state,Graphics g)
+        public void RenderBoard(Gamestate state, Graphics g)
         {
             g.DrawImage(Backgammon.Properties.Resources.Board, new Rectangle(Border1, 0, BoardSizex, BoardSizey));
-            if (BoardSizey!=0)
+            if (BoardSizey != 0)
             {
                 double DiskPixels = BoardSizex * xFractionOfStrip;
                 double FractionDisky = DiskPixels / BoardSizey;
                 double yDiffPixels = (yFractionOfStrip * BoardSizey - DiskPixels) / 14;
-                for (int i = 0; i < 24; ++i)
+                for (int i = 0; i < MAXTILE+1; ++i)
                 {
                     int colour = Math.Sign(state.GetTile(i));
                     double x = xGetTileCoordinates(i);
@@ -73,14 +73,14 @@ namespace Backgammon
 
 
 
-        public void Roll(int? dice1,int? dice2, PictureBox d1, PictureBox d2, Label l)
+        public void Roll(int? dice1, int? dice2, PictureBox d1, PictureBox d2, Label l)
         {
             player.Play();
-            RenderDice(dice1, dice2, d1, d2,4,l);
+            RenderDice(dice1, dice2, d1, d2, 4, l);
         }
-        public void SetTurn(PictureBox turn,int color)
+        public void SetTurn(PictureBox turn, int color)
         {
-            if (color==1)
+            if (color == 1)
             {
                 turn.Image = white;
             }
@@ -91,11 +91,11 @@ namespace Backgammon
         }
         public void SetBoardx(int x)
         {
-            BoardSizex = x- Border1 - Border2;
+            BoardSizex = x - Border1 - Border2;
         }
         public void SetBoardy(int y)
         {
-            BoardSizey = y-yBorder;
+            BoardSizey = y - yBorder;
         }
         public void SetBorders(int s1, int s2)
         {
@@ -106,7 +106,7 @@ namespace Backgammon
         {
             yBorder = y;
         }
-        public void RenderDice(int? dice1, int? dice2, PictureBox d1, PictureBox d2,int? Double,Label InfoBar)
+        public void RenderDice(int? dice1, int? dice2, PictureBox d1, PictureBox d2, int? Double, Label InfoBar)
         {
             if (dice1 == null)
             {
@@ -132,7 +132,7 @@ namespace Backgammon
             }
             InfoBar.Text = info;
         }
-        public void RenderBarScore(Label WScore, int WS, Label BScore, int BS, Label BBar,int BB,Label WBar,int WB)
+        public void RenderBarScore(Label WScore, int WS, Label BScore, int BS, Label BBar, int BB, Label WBar, int WB)
         {
             WScore.Text = WS.ToString();
             BBar.Text = BB.ToString();
@@ -142,17 +142,17 @@ namespace Backgammon
         public int? ClickedTile(int x, int y)
         {
             int column;
-            if (Border1+BoardSizex*xFractionOfBorder < x && x < BoardSizex + Border1- BoardSizex * xFractionOfBorder &&(x<(6*xFractionOfStrip+xFractionOfBorder)*BoardSizex+ Border1 || x>(6 * xFractionOfStrip + xFractionOfBorder+xFractionBar)*BoardSizex+Border1))
+            if (Border1 + BoardSizex * xFractionOfBorder < x && x < BoardSizex + Border1 - BoardSizex * xFractionOfBorder && (x < (6 * xFractionOfStrip + xFractionOfBorder) * BoardSizex + Border1 || x > (6 * xFractionOfStrip + xFractionOfBorder + xFractionBar) * BoardSizex + Border1))
             {
-                if (x < (6 * xFractionOfStrip + xFractionOfBorder) * BoardSizex+Border1)
+                if (x < (6 * xFractionOfStrip + xFractionOfBorder) * BoardSizex + Border1)
                 {
                     column = (int)Math.Floor((x - Border1 - BoardSizex * xFractionOfBorder) / (xFractionOfStrip * BoardSizex));
                 }
                 else
                 {
-                    column = (int)Math.Floor((x - Border1 - BoardSizex * (xFractionOfBorder+xFractionBar)) / (xFractionOfStrip * BoardSizex));
+                    column = (int)Math.Floor((x - Border1 - BoardSizex * (xFractionOfBorder + xFractionBar)) / (xFractionOfStrip * BoardSizex));
                 }
-                if (column >11 || column < 0)
+                if (column > 11 || column < 0)
                 {
                     return null;
                 }
@@ -161,23 +161,23 @@ namespace Backgammon
             {
                 return null;
             }
-            int line=2*(2*y/BoardSizey)-1;
-            return (int)(11.5-column*line-(double)line/2);
+            int line = 2 * (2 * y / BoardSizey) - 1;
+            return (int)(11.5 - column * line - (double)line / 2);
         }
 
         double xGetTileCoordinates(int tile)
         {
-            return ((Math.Abs(tile - 11.5) - 0.5) * xFractionOfStrip + xFractionOfBorder + xFractionBar * ((int)(Math.Abs((double)tile - 11.5) - 0.5) / 6)) * BoardSizex+ Border1;
+            return ((Math.Abs(tile - 11.5) - 0.5) * xFractionOfStrip + xFractionOfBorder + xFractionBar * ((int)(Math.Abs((double)tile - 11.5) - 0.5) / 6)) * BoardSizex + Border1;
         }
 
-        public void RenderStressed(Graphics g, PictureBox Bar, PictureBox Score,Gamestate gamestate)
+        public void RenderStressed(Graphics g, PictureBox Bar, PictureBox Score, Gamestate gamestate)
         {
             if (Select != null)
             {
                 Color S = (Select.Count == 1) ? Color.Red : Color.Blue;
                 foreach (int i in Select)
                 {
-                    if (i < 0 || i > 23)
+                    if (i < MINTILE || i > MAXTILE)
                     {
                         Bar.BackColor = S;
                     }
@@ -192,10 +192,10 @@ namespace Backgammon
                 Color ToS = Color.Green;
                 foreach (int j in ToSelect)
                 {
-                    if (j ==-1 || j ==24)
+                    if (j == MINTILE - 1 || j == MAXTILE + 1)
                     {
                         int color = gamestate.GetColor();
-                        int bar = (24 + color) % 25-color;
+                        int bar = (MAXTILE + 1 + color) % (MAXTILE + 2) - color;
                         if (j == bar)
                         {
                             Bar.BackColor = ToS;
@@ -235,13 +235,13 @@ namespace Backgammon
         }
         public void SetSelect(HashSet<int> S, HashSet<int> ToS)
         {
-                Select = S;
-                ToSelect = ToS;
+            Select = S;
+            ToSelect = ToS;
         }
         public void ClearSelect()
         {
-            Select=null;
-            ToSelect=null;
+            Select = null;
+            ToSelect = null;
         }
         public void ClearInfo()
         {

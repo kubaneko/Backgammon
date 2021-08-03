@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Backgammon
@@ -15,6 +10,7 @@ namespace Backgammon
         Game game = new Game();
         Gamestate gamestate;
         Engine engine = new Engine();
+        const int MAXTILE = 23;
         public Form1()
         {
             int color = game.NewToPlay();
@@ -32,8 +28,8 @@ namespace Backgammon
             {
                 engine.Roll(game.GetDice1(), game.GetDice2(), pictureBox2, pictureBox3, label11);
                 game.GenNextMoves(gamestate);
-                engine.SetSelect(null,game.GetNextMoves());
-                if ((int)game.GetDice1()== (int)game.GetDice2())
+                engine.SetSelect(null, game.GetNextMoves());
+                if ((int)game.GetDice1() == (int)game.GetDice2())
                 {
                     engine.SetInfo("Double " + game.GetDouble().ToString());
                 }
@@ -57,7 +53,7 @@ namespace Backgammon
             game.ClearNext();
             engine.ClearSelect();
             engine.ClearInfo();
-            engine.SetSelect(null,game.GetNextMoves());
+            engine.SetSelect(null, game.GetNextMoves());
             Render();
         }
 
@@ -144,49 +140,6 @@ namespace Backgammon
 
 
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == -1)
-            {
-                SelectBar(-1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
-
-        }
-
-
-
-        private void BBarBox_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == -1)
-            {
-                SelectBar(-1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
-
-        }
-
-        private void BBarLabel_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == -1)
-            {
-                SelectBar(-1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
-
-        }
         private void BBar_Click(object sender, EventArgs e)
         {
             if (gamestate.GetColor() == -1)
@@ -213,35 +166,9 @@ namespace Backgammon
             Render();
 
         }
-        private void WBarLabel_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == 1)
-            {
-                SelectBar(1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
 
-        }
 
-        private void WBarBox_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == 1)
-            {
-                SelectBar(1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
-
-        }
-
-        private void label_Click(object sender, EventArgs e)
+        private void WScore_Click(object sender, EventArgs e)
         {
             if (gamestate.GetColor() == 1)
             {
@@ -252,64 +179,10 @@ namespace Backgammon
                 Deselect();
             }
             Render();
-
         }
 
-        private void WScoreBox_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == 1)
-            {
-                PlayToScore(1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
 
-        }
-        private void WScoreLabel_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == 1)
-            {
-                PlayToScore(1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
-
-        }
-        private void label2_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == -1)
-            {
-                PlayToScore(-1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
-
-        }
-
-        private void BScoreLabel_Click(object sender, EventArgs e)
-        {
-            if (gamestate.GetColor() == -1)
-            {
-                PlayToScore(-1);
-            }
-            else
-            {
-                Deselect();
-            }
-            Render();
-
-        }
-
-        private void BScoreBox_Click(object sender, EventArgs e)
+        private void BScore_Click(object sender, EventArgs e)
         {
             if (gamestate.GetColor() == -1)
             {
@@ -327,17 +200,17 @@ namespace Backgammon
 
         void SelectBar(int color)
         {
-            int firstindex = (24 + color) % 25;
+            int firstindex = (MAXTILE + 1 + color) % (MAXTILE + 2);
             if (!game.GameOver() && game.GetRolled())
             {
-                if (game.GetNextMoves().Contains(firstindex-color))
+                if (game.GetNextMoves().Contains(firstindex - color))
                 {
                     if (game.GetSelected() == null)
                     {
                         game.SetSelected(firstindex - color);
                         game.GenNextMoves(gamestate);
                         engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                        engine.SetSelect(new HashSet<int> {firstindex-color }, game.GetNextMoves());
+                        engine.SetSelect(new HashSet<int> { firstindex - color }, game.GetNextMoves());
                     }
                 }
                 else
@@ -353,10 +226,10 @@ namespace Backgammon
         }
         void PlayToScore(int color)
         {
-            int lastindex = (24 - color) % 25;
-            if ( !game.GameOver() && game.GetRolled())
+            int lastindex = (MAXTILE + 1 - color) % (MAXTILE + 2);
+            if (!game.GameOver() && game.GetRolled())
             {
-                if (game.GetNextMoves().Contains(lastindex+color))
+                if (game.GetNextMoves().Contains(lastindex + color))
                 {
                     if (game.GetSelected() != null)
                     {
@@ -418,7 +291,7 @@ namespace Backgammon
                 engine.ClearSelect();
                 game.GenNextMoves(gamestate);
                 engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                engine.SetSelect(null,game.GetNextMoves());
+                engine.SetSelect(null, game.GetNextMoves());
             }
         }
     }

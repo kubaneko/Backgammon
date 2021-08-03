@@ -1,19 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Backgammon
 {
     public class Gamestate
     {
-        int[] Desk = new int[24];
+        /* Class reprezenting the state of the game the methods this class provides does not correct wrong input
+         */
+
+        // Playing desk, black stones aare represented by -1 and white ones by 1
+        int[] Desk;
+        // nuber of disks removed by the opponent
         int BBar = 0;
         int WBar = 0;
-        int WScore=0;
-        int BScore=0;
-        int Color = 1;
+        // Score of the players
+        int WScore = 0;
+        int BScore = 0;
         // Is equal to one on White players turn and -1 on Black Players Turn
+        int Color = 1;
+        // constants of the game, MAXTILE is maximum tile to be able to play to or from
+        const int MAXTILE = 23;
+        const int MAXSCORE = 15;
 
         public Gamestate(int[] desk, int bBar, int wBar, int wScore, int bscore, int color)
         {
@@ -28,31 +34,45 @@ namespace Backgammon
         public Gamestate(int color)
         {
             Color = color;
-            Desk = new int[24] { 2,0,0,0,0,-5,0,-3,0,0,0,5,-5,0,0,0,3,0,5,0,0,0,0,-2 };
-            //Desk = new int[24] { -15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15 };
+            // standard way starting point on the desk
+            Desk = new int[MAXTILE+1] { 2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2 };
             BBar = 0;
             WBar = 0;
             WScore = 0;
             BScore = 0;
         }
 
-        public Gamestate Copy()
-        {
-            return new Gamestate(Desk, BBar, WBar, WScore, BScore, Color);
-        }
-
+        // returns score of player whose turn it is 
         public int GetScore()
         {
-            if (Color==1)
+            if (Color == 1)
             {
                 return WScore;
             }
             return BScore;
         }
-        public bool IsLastInHomerow(int from)
+
+        // Returns if the player whose turn it is can score
+        public bool HomeRowFull()
         {
-            int LastIndex = (24 - Color )% 25-5*Color;
-            for (int i = LastIndex; i * Color < from * Color; i += Color)
+            int DisksInHome = 0;
+            int index = ((MAXTILE + 1) - Color) % (MAXTILE + 2);
+            // Index of last Tile for the player in his Home Row
+            for (int i = 0; i < 6; ++i)
+            {
+                if (Desk[index] * Color > 0)
+                    DisksInHome += Color * Desk[index];
+                index -= Color;
+            }
+            return DisksInHome == MAXSCORE - GetScore();
+        }
+
+        // returns whether there are stones before the stone in the homerow
+        // used to calculate whether you can use a greater number on the dice to score
+        public bool IsLastInHomerow(int stone)
+        {
+            int LastIndex = ((MAXTILE + 1) - Color) % (MAXTILE + 2) - 5 * Color;
+            for (int i = LastIndex; i * Color < stone * Color; i += Color)
             {
                 if (Desk[i] * Color > 0)
                 {
@@ -61,24 +81,11 @@ namespace Backgammon
             }
             return true;
         }
-        public bool HomeRowFull() 
-        {
-            int DisksInHome = 0;
-            int index = (24 - Color) % 25;
-            // Index of last Tile for the player in his Home Row
-            for (int i = 0; i < 6; ++i)
-                {
-                    if (Desk[index]*Color > 0)
-                        DisksInHome += Color*Desk[index];
-                index -= Color;
-                }
-            return DisksInHome == 15-GetScore();
-        }
-
-        public void Score(int From)
+        // Scores for the player in turn
+        public void MoveToScore(int From)
         {
             Desk[From] -= Color;
-            if (Color==1)
+            if (Color == 1)
             {
                 ++WScore;
             }
@@ -87,19 +94,21 @@ namespace Backgammon
                 ++BScore;
             }
         }
+        // returns a concrete tile
         public int GetTile(int x)
         {
             return Desk[x];
         }
-        public void Move(int From,int To)
+        // removes the stone from its tile and lets the function MoveTo move it
+        public void Move(int From, int To)
         {
             Desk[From] -= Color;
             MoveTo(To);
         }
+        // removes the stone from the bar and lets the function MoveTo move it
         public void MoveFromBar(int To)
         {
-            int color = GetColor();
-            if (Color==1)
+            if (Color == 1)
             {
                 --WBar;
             }
@@ -109,12 +118,13 @@ namespace Backgammon
             }
             MoveTo(To);
         }
+        // The function handles removing enemy stones from play and moving your stones
         void MoveTo(int To)
         {
             if (Desk[To] * Color < 0)
             {
                 Desk[To] += 2 * Color;
-                if (Color==1)
+                if (Color == 1)
                 {
                     ++BBar;
                 }
@@ -128,52 +138,36 @@ namespace Backgammon
                 Desk[To] += Color;
             }
         }
+        // returns whose turn it is
         public int GetColor()
         {
             return Color;
         }
-
+        // Returns whether you have to play from bar, if possible, or not
         public bool BarEmpty()
         {
-            if (Color==1)
+            if (Color == 1)
             {
-                return WBar==0;
+                return WBar == 0;
             }
             else
             {
                 return BBar == 0;
             }
         }
+        // Changes the current player in turn
         public void Turn()
         {
             Color *= -1;
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj is Gamestate gamestate &&
-                   EqualityComparer<int[]>.Default.Equals(Desk, gamestate.Desk) &&
-                   BBar == gamestate.BBar &&
-                   WBar == gamestate.WBar &&
-                   Color == gamestate.Color;
-        }
-
-        public override int GetHashCode()
-        {
-            int hashCode = 52350545;
-            hashCode = hashCode * -1521134295 + EqualityComparer<int[]>.Default.GetHashCode(Desk);
-            hashCode = hashCode * -1521134295 + BBar.GetHashCode();
-            hashCode = hashCode * -1521134295 + WBar.GetHashCode();
-            hashCode = hashCode * -1521134295 + Color.GetHashCode();
-            return hashCode;
-        }
+        // Getters for scores and bars
         public int GetWBar()
         {
-                return WBar;
+            return WBar;
         }
         public int GetBBar()
         {
-                return BBar;
+            return BBar;
         }
         public int GetBScore()
         {
@@ -183,12 +177,15 @@ namespace Backgammon
         {
             return WScore;
         }
+
+        // returns color of the player who won or null
         public int? Won()
         {
-            if (WScore==15){
+            if (WScore == MAXSCORE)
+            {
                 return 1;
             }
-            if (BScore == 15)
+            if (BScore == MAXSCORE)
             {
                 return -1;
             }

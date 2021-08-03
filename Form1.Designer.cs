@@ -103,7 +103,7 @@ namespace Backgammon
             this.label1.Size = new System.Drawing.Size(96, 20);
             this.label1.TabIndex = 3;
             this.label1.Text = "White Score";
-            this.label1.Click += new System.EventHandler(this.label_Click);
+            this.label1.Click += new System.EventHandler(this.WScore_Click);
             // 
             // label2
             // 
@@ -115,7 +115,7 @@ namespace Backgammon
             this.label2.Size = new System.Drawing.Size(94, 20);
             this.label2.TabIndex = 4;
             this.label2.Text = "Black Score";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            this.label2.Click += new System.EventHandler(this.BScore_Click);
             // 
             // label3
             // 
@@ -175,7 +175,7 @@ namespace Backgammon
             this.WScoreBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.WScoreBox.TabIndex = 16;
             this.WScoreBox.TabStop = false;
-            this.WScoreBox.Click += new System.EventHandler(this.WScoreBox_Click);
+            this.WScoreBox.Click += new System.EventHandler(this.WScore_Click);
             // 
             // BScoreBox
             // 
@@ -188,7 +188,7 @@ namespace Backgammon
             this.BScoreBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.BScoreBox.TabIndex = 19;
             this.BScoreBox.TabStop = false;
-            this.BScoreBox.Click += new System.EventHandler(this.BScoreBox_Click);
+            this.BScoreBox.Click += new System.EventHandler(this.BScore_Click);
             // 
             // WBarBox
             // 
@@ -201,7 +201,7 @@ namespace Backgammon
             this.WBarBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.WBarBox.TabIndex = 18;
             this.WBarBox.TabStop = false;
-            this.WBarBox.Click += new System.EventHandler(this.WBarBox_Click);
+            this.WBarBox.Click += new System.EventHandler(this.WBar_Click);
             // 
             // BBarBox
             // 
@@ -214,7 +214,7 @@ namespace Backgammon
             this.BBarBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.BBarBox.TabIndex = 17;
             this.BBarBox.TabStop = false;
-            this.BBarBox.Click += new System.EventHandler(this.BBarBox_Click);
+            this.BBarBox.Click += new System.EventHandler(this.BBar_Click);
             // 
             // pictureBox3
             // 
@@ -281,7 +281,7 @@ namespace Backgammon
             this.WScoreLabel.Size = new System.Drawing.Size(18, 20);
             this.WScoreLabel.TabIndex = 23;
             this.WScoreLabel.Text = "0";
-            this.WScoreLabel.Click += new System.EventHandler(this.WScoreLabel_Click);
+            this.WScoreLabel.Click += new System.EventHandler(this.WScore_Click);
             // 
             // BBarLabel
             // 
@@ -292,7 +292,7 @@ namespace Backgammon
             this.BBarLabel.Size = new System.Drawing.Size(18, 20);
             this.BBarLabel.TabIndex = 24;
             this.BBarLabel.Text = "0";
-            this.BBarLabel.Click += new System.EventHandler(this.BBarLabel_Click);
+            this.BBarLabel.Click += new System.EventHandler(this.BBar_Click);
             // 
             // WBarLabel
             // 
@@ -303,7 +303,7 @@ namespace Backgammon
             this.WBarLabel.Size = new System.Drawing.Size(18, 20);
             this.WBarLabel.TabIndex = 25;
             this.WBarLabel.Text = "0";
-            this.WBarLabel.Click += new System.EventHandler(this.WBarLabel_Click);
+            this.WBarLabel.Click += new System.EventHandler(this.WBar_Click);
             // 
             // BScoreLabel
             // 
@@ -314,7 +314,7 @@ namespace Backgammon
             this.BScoreLabel.Size = new System.Drawing.Size(18, 20);
             this.BScoreLabel.TabIndex = 26;
             this.BScoreLabel.Text = "0";
-            this.BScoreLabel.Click += new System.EventHandler(this.BScoreLabel_Click);
+            this.BScoreLabel.Click += new System.EventHandler(this.BScore_Click);
             // 
             // label11
             // 
