@@ -33,6 +33,14 @@ namespace Backgammon
                 engine.Roll(game.GetDice1(), game.GetDice2(), pictureBox2, pictureBox3, label11);
                 game.GenNextMoves(gamestate);
                 engine.SetSelect(null,game.GetNextMoves());
+                if ((int)game.GetDice1()== (int)game.GetDice2())
+                {
+                    engine.SetInfo("Double " + game.GetDouble().ToString());
+                }
+                else
+                {
+                    engine.ClearInfo();
+                }
                 IfTurnOver();
                 Render();
             }
@@ -48,14 +56,21 @@ namespace Backgammon
             game.Reset();
             game.ClearNext();
             engine.ClearSelect();
+            engine.ClearInfo();
             engine.SetSelect(null,game.GetNextMoves());
             Render();
         }
 
         private void Resign_Click(object sender, EventArgs e)
         {
-            game.SetResult( gamestate.GetColor());
-            Deselect();
+            if (!game.GameOver())
+            {
+                game.SetResult(gamestate.GetColor());
+                engine.SetResult(gamestate.GetColor() * -1);
+                game.SetRolled(true);
+                Deselect();
+                Render();
+            }
         }
 
         private void PlayComp_CheckedChanged(object sender, EventArgs e)
@@ -88,10 +103,15 @@ namespace Backgammon
                     if (game.GetSelected() != null)
                     {
                         game.PlayValidTo((int)x, gamestate);
+                        if (game.GetDouble() > 0)
+                        {
+                            engine.SetInfo("Double " + game.GetDouble().ToString());
+                        }
                         game.SetSelected(null);
+                        engine.ClearSelect();
                         game.GenNextMoves(gamestate);
                         engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                        engine.SetSelect(null,game.GetNextMoves());
+                        engine.SetSelect(null, game.GetNextMoves());
                         IfTurnOver();
                     }
                     else
@@ -122,7 +142,8 @@ namespace Backgammon
                 engine.RenderDice(game.GetDice1(), game.GetDice2(), pictureBox2, pictureBox3, game.GetDouble(), label11);
                 engine.RenderStressed(g,
                     gamestate.GetColor() == 1 ? WBarBox : BBarBox,
-                    gamestate.GetColor() == 1 ? WScoreBox : BScoreBox);
+                    gamestate.GetColor() == 1 ? WScoreBox : BScoreBox,
+                    gamestate);
                 engine.SetTurn(TurnBox, gamestate.GetColor());
             }
         }
@@ -345,12 +366,27 @@ namespace Backgammon
                 {
                     if (game.GetSelected() != null)
                     {
-                        game.PlayValidTo(lastindex + color, gamestate);
-                        game.SetSelected(null);
-                        game.GenNextMoves(gamestate);
-                        engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                        engine.SetSelect(null, game.GetNextMoves());
-                        IfTurnOver();
+                        game.PlayValidTo((int)lastindex + color, gamestate);
+                        if (game.GameOver())
+                        {
+                            engine.SetResult(gamestate.GetColor());
+                            engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
+                            engine.ClearSelect();
+                            game.SetRolled(true);
+                        }
+                        else
+                        {
+                            if (game.GetDouble() > 0)
+                            {
+                                engine.SetInfo("Double " + game.GetDouble().ToString());
+                            }
+                            game.SetSelected(null);
+                            engine.ClearSelect();
+                            game.GenNextMoves(gamestate);
+                            engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
+                            engine.SetSelect(null, game.GetNextMoves());
+                            IfTurnOver();
+                        }
                     }
                     else
                     {
@@ -376,7 +412,7 @@ namespace Backgammon
                 game.Turn();
                 engine.ClearSelect();
                 engine.SetTurn(TurnBox, gamestate.GetColor());
-                engine.SetInfo("No more moves Your turn is over");
+                engine.SetInfo("Your turn is Over");
             }
         }
 
@@ -385,6 +421,7 @@ namespace Backgammon
             if (game.GetSelected() != null)
             {
                 game.SetSelected(null);
+                engine.ClearSelect();
                 game.GenNextMoves(gamestate);
                 engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
                 engine.SetSelect(null,game.GetNextMoves());

@@ -106,16 +106,14 @@ namespace Backgammon
         {
             yBorder = y;
         }
-        public void RenderDice(int? dice1, int? dice2, PictureBox d1, PictureBox d2,int? Double,Label DoubleText)
+        public void RenderDice(int? dice1, int? dice2, PictureBox d1, PictureBox d2,int? Double,Label InfoBar)
         {
-            bool CanBeDouble = true;
             if (dice1 == null)
             {
                 using (Graphics g = d1.CreateGraphics())
                 {
                     g.Clear(Color.Black);
                 }
-                CanBeDouble = false;
             }
             else
             {
@@ -127,16 +125,12 @@ namespace Backgammon
                 {
                     g.Clear(Color.Black);
                 }
-                CanBeDouble = false;
             }
             else
             {
                 d2.Image = dice[(int)dice2];
             }
-            if (CanBeDouble && dice1==dice2 && Double!=0)
-            {
-                info= "Double " + Double.ToString();
-            }
+            InfoBar.Text = info;
         }
         public void RenderBarScore(Label WScore, int WS, Label BScore, int BS, Label BBar,int BB,Label WBar,int WB)
         {
@@ -176,30 +170,45 @@ namespace Backgammon
             return ((Math.Abs(tile - 11.5) - 0.5) * xFractionOfStrip + xFractionOfBorder + xFractionBar * ((int)(Math.Abs((double)tile - 11.5) - 0.5) / 6)) * BoardSizex+ Border1;
         }
 
-        public void RenderStressed(Graphics g, PictureBox Bar, PictureBox Score)
+        public void RenderStressed(Graphics g, PictureBox Bar, PictureBox Score,Gamestate gamestate)
         {
-            Color S = (Select.Count == 1) ? Color.Red : Color.Blue;
-            Color ToS = Color.Green;
-            foreach (int i in Select)
+            if (Select != null)
             {
-                if (i < 0 || i > 23)
+                Color S = (Select.Count == 1) ? Color.Red : Color.Blue;
+                foreach (int i in Select)
                 {
-                    Bar.BackColor = S;
-                }
-                else
-                {
-                    DrawStress(g, S, i);
+                    if (i < 0 || i > 23)
+                    {
+                        Bar.BackColor = S;
+                    }
+                    else
+                    {
+                        DrawStress(g, S, i);
+                    }
                 }
             }
-            foreach (int j in ToSelect)
+            if (ToSelect != null)
             {
-                if (j < 0 || j > 23)
+                Color ToS = Color.Green;
+                foreach (int j in ToSelect)
                 {
-                    Score.BackColor = ToS;
-                }
-                else
-                {
-                    DrawStress(g, ToS, j);
+                    if (j ==-1 || j ==24)
+                    {
+                        int color = gamestate.GetColor();
+                        int bar = (24 + color) % 25-color;
+                        if (j == bar)
+                        {
+                            Bar.BackColor = ToS;
+                        }
+                        else
+                        {
+                            Score.BackColor = ToS;
+                        }
+                    }
+                    else
+                    {
+                        DrawStress(g, ToS, j);
+                    }
                 }
             }
         }
@@ -226,19 +235,13 @@ namespace Backgammon
         }
         public void SetSelect(HashSet<int> S, HashSet<int> ToS)
         {
-            if (S != null)
-            {
                 Select = S;
-            }
-            if (ToS != null)
-            {
                 ToSelect = ToS;
-            }
         }
         public void ClearSelect()
         {
-            Select.Clear();
-            ToSelect.Clear();
+            Select=null;
+            ToSelect=null;
         }
         public void ClearInfo()
         {
@@ -247,6 +250,20 @@ namespace Backgammon
         public void SetInfo(string inf)
         {
             info = inf;
+        }
+        public void SetResult(int color)
+        {
+            if (color == 1)
+            {
+                info = "White Won";
+            }
+            else
+            {
+                if (color == -1)
+                {
+                    info = "Black Won";
+                }
+            }
         }
     }
 }

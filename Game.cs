@@ -22,18 +22,20 @@ namespace Backgammon
         {
             return BlackWon || WhiteWon;
         }
-        public void SetResult(int color)
+        public void SetResult(int? color)
         {
+            if (color == null)
+            {
+                return;
+            }
             if (color == 1)
             {
                 WhiteWon = true;
+
             }
             else
             {
-                if (color == -1)
-                {
-                    BlackWon = true;
-                }
+                BlackWon = true;
             }
         }
         public bool GetWhiteWon()
@@ -60,6 +62,10 @@ namespace Backgammon
                 }
             }
             return roll;
+        }
+        public void SetRolled(bool Rolled)
+        {
+            rolled = Rolled;
         }
 
         public int? GetDice1()
@@ -140,6 +146,7 @@ namespace Backgammon
             if (color*to>lastindex*color)
             {
                 state.Score((int)Selected);
+                SetResult(state.Won());
             }
             else
             {
@@ -167,6 +174,8 @@ namespace Backgammon
             rolled = false;
             dice1 = null;
             dice2 = null;
+            BlackWon = false;
+            WhiteWon = false;
         }
         bool ExistsDiceMove(int From,Gamestate gamestate)
         {

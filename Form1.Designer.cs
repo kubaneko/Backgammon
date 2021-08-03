@@ -319,6 +319,7 @@ namespace Backgammon
             // 
             // label11
             // 
+            this.label11.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(653, 294);
             this.label11.Name = "label11";
