@@ -39,7 +39,6 @@ namespace Backgammon
             this.label4 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.WScoreBox = new System.Windows.Forms.PictureBox();
             this.BScoreBox = new System.Windows.Forms.PictureBox();
             this.WBarBox = new System.Windows.Forms.PictureBox();
@@ -54,6 +53,7 @@ namespace Backgammon
             this.WBarLabel = new System.Windows.Forms.Label();
             this.BScoreLabel = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.WScoreBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BScoreBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WBarBox)).BeginInit();
@@ -104,6 +104,7 @@ namespace Backgammon
             this.label1.Size = new System.Drawing.Size(96, 20);
             this.label1.TabIndex = 3;
             this.label1.Text = "White Score";
+            this.label1.Click += new System.EventHandler(this.label_Click);
             // 
             // label2
             // 
@@ -115,6 +116,7 @@ namespace Backgammon
             this.label2.Size = new System.Drawing.Size(94, 20);
             this.label2.TabIndex = 4;
             this.label2.Text = "Black Score";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
             // 
@@ -162,18 +164,6 @@ namespace Backgammon
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Resign_Click);
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(2, 106);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(138, 24);
-            this.checkBox1.TabIndex = 11;
-            this.checkBox1.Text = "Play Computer";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.PlayComp_CheckedChanged);
-            // 
             // WScoreBox
             // 
             this.WScoreBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -186,6 +176,7 @@ namespace Backgammon
             this.WScoreBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.WScoreBox.TabIndex = 16;
             this.WScoreBox.TabStop = false;
+            this.WScoreBox.Click += new System.EventHandler(this.WScoreBox_Click);
             // 
             // BScoreBox
             // 
@@ -198,6 +189,7 @@ namespace Backgammon
             this.BScoreBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.BScoreBox.TabIndex = 19;
             this.BScoreBox.TabStop = false;
+            this.BScoreBox.Click += new System.EventHandler(this.BScoreBox_Click);
             // 
             // WBarBox
             // 
@@ -210,6 +202,7 @@ namespace Backgammon
             this.WBarBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.WBarBox.TabIndex = 18;
             this.WBarBox.TabStop = false;
+            this.WBarBox.Click += new System.EventHandler(this.WBarBox_Click);
             // 
             // BBarBox
             // 
@@ -222,6 +215,7 @@ namespace Backgammon
             this.BBarBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.BBarBox.TabIndex = 17;
             this.BBarBox.TabStop = false;
+            this.BBarBox.Click += new System.EventHandler(this.BBarBox_Click);
             // 
             // pictureBox3
             // 
@@ -288,6 +282,7 @@ namespace Backgammon
             this.WScoreLabel.Size = new System.Drawing.Size(18, 20);
             this.WScoreLabel.TabIndex = 23;
             this.WScoreLabel.Text = "0";
+            this.WScoreLabel.Click += new System.EventHandler(this.WScoreLabel_Click);
             // 
             // BBarLabel
             // 
@@ -298,6 +293,7 @@ namespace Backgammon
             this.BBarLabel.Size = new System.Drawing.Size(18, 20);
             this.BBarLabel.TabIndex = 24;
             this.BBarLabel.Text = "0";
+            this.BBarLabel.Click += new System.EventHandler(this.BBarLabel_Click);
             // 
             // WBarLabel
             // 
@@ -308,6 +304,7 @@ namespace Backgammon
             this.WBarLabel.Size = new System.Drawing.Size(18, 20);
             this.WBarLabel.TabIndex = 25;
             this.WBarLabel.Text = "0";
+            this.WBarLabel.Click += new System.EventHandler(this.WBarLabel_Click);
             // 
             // BScoreLabel
             // 
@@ -318,6 +315,7 @@ namespace Backgammon
             this.BScoreLabel.Size = new System.Drawing.Size(18, 20);
             this.BScoreLabel.TabIndex = 26;
             this.BScoreLabel.Text = "0";
+            this.BScoreLabel.Click += new System.EventHandler(this.BScoreLabel_Click);
             // 
             // label11
             // 
@@ -326,6 +324,18 @@ namespace Backgammon
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(0, 20);
             this.label11.TabIndex = 27;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(2, 106);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(138, 24);
+            this.checkBox1.TabIndex = 11;
+            this.checkBox1.Text = "Play Computer";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.PlayComp_CheckedChanged);
             // 
             // Form1
             // 
@@ -385,7 +395,6 @@ namespace Backgammon
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox WScoreBox;
@@ -400,6 +409,7 @@ namespace Backgammon
         private System.Windows.Forms.Label WBarLabel;
         private System.Windows.Forms.Label BScoreLabel;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

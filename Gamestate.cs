@@ -68,10 +68,10 @@ namespace Backgammon
             for (int i = 0; i < 6; ++i)
                 {
                     if (Desk[index]*Color > 0)
-                        DisksInHome += Desk[index];
+                        DisksInHome += Color*Desk[index];
                 index -= Color;
                 }
-            return DisksInHome == 15;
+            return DisksInHome == 15-GetScore();
         }
 
         public void Score(int From)
@@ -166,27 +166,21 @@ namespace Backgammon
             hashCode = hashCode * -1521134295 + Color.GetHashCode();
             return hashCode;
         }
-        public int GetMyBar()
+        public int GetWBar()
         {
-            if (Color == 1)
-            {
                 return WBar;
-            }
-            else
-            {
-                return BBar;
-            }
         }
-        public int GetEnemyBar()
+        public int GetBBar()
         {
-            if (Color == 1)
-            {
                 return BBar;
-            }
-            else
-            {
-                return WBar;
-            }
+        }
+        public int GetBScore()
+        {
+            return BScore;
+        }
+        public int GetWScore()
+        {
+            return WScore;
         }
         public int? Won()
         {

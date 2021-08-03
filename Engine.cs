@@ -33,6 +33,7 @@ namespace Backgammon
         int Border1;
         int Border2;
         int yBorder;
+        string info = "";
 
         public Engine()
         {
@@ -132,20 +133,17 @@ namespace Backgammon
             {
                 d2.Image = dice[(int)dice2];
             }
-            if (CanBeDouble && dice1==dice2)
+            if (CanBeDouble && dice1==dice2 && Double!=0)
             {
-                DoubleText.Text = "Double " + Double.ToString();
-            }
-            else
-            {
-                DoubleText.Text = "";
+                info= "Double " + Double.ToString();
             }
         }
-        public void RenderBarScore(Label MyScore, int MS,Label EnemyBar,int EB,Label MyBar,int MB)
+        public void RenderBarScore(Label WScore, int WS, Label BScore, int BS, Label BBar,int BB,Label WBar,int WB)
         {
-            MyScore.Text = MS.ToString();
-            EnemyBar.Text = EB.ToString();
-            MyBar.Text = MB.ToString();
+            WScore.Text = WS.ToString();
+            BBar.Text = BB.ToString();
+            WBar.Text = WB.ToString();
+            BScore.Text = BS.ToString();
         }
         public int? ClickedTile(int x, int y)
         {
@@ -219,11 +217,12 @@ namespace Backgammon
             }
         }
 
-        public void ClearSelect(PictureBox WScore, PictureBox BScore, PictureBox BBar, PictureBox WBar)
+        public void ClearPictures(PictureBox WScore, PictureBox BScore, PictureBox BBar, PictureBox WBar)
         {
-            Select.Clear();
-            ToSelect.Clear();
-            ClearPictures(WScore,BScore,WBar,BBar);
+            WScore.BackColor = Color.Transparent;
+            BScore.BackColor = Color.Transparent;
+            WBar.BackColor = Color.Transparent;
+            BBar.BackColor = Color.Transparent;
         }
         public void SetSelect(HashSet<int> S, HashSet<int> ToS)
         {
@@ -236,12 +235,18 @@ namespace Backgammon
                 ToSelect = ToS;
             }
         }
-        void ClearPictures(PictureBox WScore,PictureBox BScore,PictureBox BBar,PictureBox WBar)
+        public void ClearSelect()
         {
-            WScore.BackColor = Color.Transparent;
-            BScore.BackColor = Color.Transparent;
-            WBar.BackColor = Color.Transparent;
-            BBar.BackColor = Color.Transparent;
+            Select.Clear();
+            ToSelect.Clear();
+        }
+        public void ClearInfo()
+        {
+            info = "";
+        }
+        public void SetInfo(string inf)
+        {
+            info = inf;
         }
     }
 }
