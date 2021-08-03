@@ -7,7 +7,6 @@ namespace Backgammon
 {
     public class Game
     {
-        public bool Computer = false;
         protected int? Selected;
         protected HashSet<int> NextMoves=new HashSet<int>();
         protected bool rolled = false;

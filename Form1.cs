@@ -73,12 +73,6 @@ namespace Backgammon
             }
         }
 
-        private void PlayComp_CheckedChanged(object sender, EventArgs e)
-        {
-            game.Computer = checkBox1.Checked;
-            Deselect();
-        }
-
         private void FormShown(object sender, EventArgs e)
         {
             engine.SetBoardx(this.Width);
