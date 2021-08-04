@@ -150,6 +150,15 @@ namespace Backgammon.Properties {
         }
         
         /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.IO.UnmanagedMemoryStream podobný System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream moved {
+            get {
+                return ResourceManager.GetStream("moved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap WDot {

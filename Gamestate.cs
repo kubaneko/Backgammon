@@ -42,6 +42,38 @@ namespace Backgammon
             BScore = 0;
         }
 
+        // returns a concrete tile
+        public int GetTile(int x)
+        {
+            return Desk[x];
+        }
+
+        // returns whose turn it is
+        public int GetColor()
+        {
+            return Color;
+        }
+
+        // Changes the current player in turn
+        public void Turn()
+        {
+            Color *= -1;
+        }
+
+        // returns color of the player who won or null
+        public int? Won()
+        {
+            if (WScore == MAXSCORE)
+            {
+                return 1;
+            }
+            if (BScore == MAXSCORE)
+            {
+                return -1;
+            }
+            return null;
+        }
+
         // returns score of player whose turn it is 
         public int GetScore()
         {
@@ -50,6 +82,38 @@ namespace Backgammon
                 return WScore;
             }
             return BScore;
+        }
+
+
+        // Getters for scores and bars
+        public int GetWBar()
+        {
+            return WBar;
+        }
+        public int GetBBar()
+        {
+            return BBar;
+        }
+        public int GetBScore()
+        {
+            return BScore;
+        }
+        public int GetWScore()
+        {
+            return WScore;
+        }
+
+        // Returns whether you have to play from bar, if possible, or not
+        public bool BarEmpty()
+        {
+            if (Color == 1)
+            {
+                return WBar == 0;
+            }
+            else
+            {
+                return BBar == 0;
+            }
         }
 
         // Returns if the player whose turn it is can score
@@ -81,6 +145,12 @@ namespace Backgammon
             }
             return true;
         }
+        // removes the stone from its tile and lets the function MoveTo move it
+        public void Move(int From, int To)
+        {
+            Desk[From] -= Color;
+            MoveTo(To);
+        }
         // Scores for the player in turn
         public void MoveToScore(int From)
         {
@@ -93,17 +163,6 @@ namespace Backgammon
             {
                 ++BScore;
             }
-        }
-        // returns a concrete tile
-        public int GetTile(int x)
-        {
-            return Desk[x];
-        }
-        // removes the stone from its tile and lets the function MoveTo move it
-        public void Move(int From, int To)
-        {
-            Desk[From] -= Color;
-            MoveTo(To);
         }
         // removes the stone from the bar and lets the function MoveTo move it
         public void MoveFromBar(int To)
@@ -137,59 +196,6 @@ namespace Backgammon
             {
                 Desk[To] += Color;
             }
-        }
-        // returns whose turn it is
-        public int GetColor()
-        {
-            return Color;
-        }
-        // Returns whether you have to play from bar, if possible, or not
-        public bool BarEmpty()
-        {
-            if (Color == 1)
-            {
-                return WBar == 0;
-            }
-            else
-            {
-                return BBar == 0;
-            }
-        }
-        // Changes the current player in turn
-        public void Turn()
-        {
-            Color *= -1;
-        }
-        // Getters for scores and bars
-        public int GetWBar()
-        {
-            return WBar;
-        }
-        public int GetBBar()
-        {
-            return BBar;
-        }
-        public int GetBScore()
-        {
-            return BScore;
-        }
-        public int GetWScore()
-        {
-            return WScore;
-        }
-
-        // returns color of the player who won or null
-        public int? Won()
-        {
-            if (WScore == MAXSCORE)
-            {
-                return 1;
-            }
-            if (BScore == MAXSCORE)
-            {
-                return -1;
-            }
-            return null;
         }
     }
 }

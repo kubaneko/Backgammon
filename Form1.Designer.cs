@@ -219,7 +219,7 @@ namespace Backgammon
             // pictureBox3
             // 
             this.pictureBox3.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.pictureBox3.Image = global::Backgammon.Properties.Resources.Alea_1;
+            this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox3.InitialImage = global::Backgammon.Properties.Resources.Alea_1;
             this.pictureBox3.Location = new System.Drawing.Point(729, 237);
             this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -232,7 +232,7 @@ namespace Backgammon
             // pictureBox2
             // 
             this.pictureBox2.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.pictureBox2.Image = global::Backgammon.Properties.Resources.Alea_1;
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox2.InitialImage = global::Backgammon.Properties.Resources.Alea_1;
             this.pictureBox2.Location = new System.Drawing.Point(628, 237);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);

@@ -125,5 +125,8 @@
   <ItemGroup>
     <None Include="bin\Debug\WDot2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\COMMic_Microphone tapping 1 %28ID 2016%29_BSB.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
