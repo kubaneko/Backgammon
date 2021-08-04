@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Backgammon
+﻿namespace Backgammon
 {
     public class Gamestate
     {
@@ -35,7 +33,7 @@ namespace Backgammon
         {
             Color = color;
             // standard way starting point on the desk
-            Desk = new int[MAXTILE+1] { 2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2 };
+            Desk = new int[MAXTILE + 1] { 2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2 };
             BBar = 0;
             WBar = 0;
             WScore = 0;

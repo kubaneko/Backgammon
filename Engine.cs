@@ -16,7 +16,7 @@ namespace Backgammon
         //Graphics and sounds
         Bitmap white = Backgammon.Properties.Resources.WDot;
         Bitmap black = Backgammon.Properties.Resources.BDot;
-        System.Media.SoundPlayer player= new System.Media.SoundPlayer(Backgammon.Properties.Resources.dice);
+        System.Media.SoundPlayer player = new System.Media.SoundPlayer(Backgammon.Properties.Resources.dice);
         System.Media.SoundPlayer player2 = new System.Media.SoundPlayer(Backgammon.Properties.Resources.moved);
         Dictionary<int, Bitmap> dice = new Dictionary<int, Bitmap>
         {
@@ -77,7 +77,7 @@ namespace Backgammon
                 // size of the gaps between stones so they all fit
                 double yDiffPixels = (yFractionOfStrip * BoardSizey - StonePixels) / 14;
                 // displaying stones for every tile
-                for (int i = 0; i < MAXTILE+1; ++i)
+                for (int i = 0; i < MAXTILE + 1; ++i)
                 {
                     // their color and coordinates
                     int colour = Math.Sign(state.GetTile(i));
@@ -259,7 +259,7 @@ namespace Backgammon
         {
             return ((Math.Abs(tile - 11.5) - 0.5) * xFractionOfStrip + xFractionOfBorder + xFractionBar * ((int)(Math.Abs((double)tile - 11.5) - 0.5) / 6)) * BoardSizex + Menu1;
         }
-        
+
         // sets stressed tiles/constrols)
         public void SetSelect(HashSet<int> S, HashSet<int> ToS)
         {

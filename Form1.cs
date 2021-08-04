@@ -101,40 +101,37 @@ namespace Backgammon
         {
             // we get the tile clicked
             int? x = engine.ClickedTile(e.X, e.Y);
-            if (x != null && !game.GameOver() && game.GetRolled())
+            if (x != null && !game.GameOver() && game.GetRolled() && game.GetNextMoves().Contains((int)x))
             {
                 // if the move is within board and makes sense to click on the tile
                 // we look whether selecting the tile is valid
-                if (game.GetNextMoves().Contains((int)x))
+                if (game.GetSelected() != null)
                 {
-                    if (game.GetSelected() != null)
+                    // we move the stone reset stressed and next tiles if the turn is not over we shown the new ones
+                    game.PlayValidTo((int)x, gamestate);
+                    engine.PlayMoved();
+                    if (game.GetDouble() > 0)
                     {
-                        // we move the stone reset stressed and next tiles if the turn is not over we shown the new ones
-                        game.PlayValidTo((int)x, gamestate);
-                        engine.PlayMoved();
-                        if (game.GetDouble() > 0)
-                        {
-                            engine.SetDouble(game.GetDouble());
-                        }
-                        game.SetSelected(null);
-                        engine.ClearSelect();
-                        game.GenNextMoves(gamestate);
-                        engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                        engine.SetSelect(null, game.GetNextMoves());
-                        IfTurnOver();
+                        engine.SetDouble(game.GetDouble());
                     }
-                    else
-                    {
-                        // we select the stone and generate moves for it
-                        game.SetSelected((int)x);
-                        game.GenNextMoves(gamestate);
-                        engine.SetSelect(new HashSet<int> { (int)x }, game.GetNextMoves());
-                    }
-                    Render();
-                    return;
+                    game.SetSelected(null);
+                    engine.ClearSelect();
+                    game.GenNextMoves(gamestate);
+                    engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
+                    engine.SetSelect(null, game.GetNextMoves());
+                    IfTurnOver();
                 }
+                else
+                {
+                    // we select the stone and generate moves for it
+                    game.SetSelected((int)x);
+                    game.GenNextMoves(gamestate);
+                    engine.SetSelect(new HashSet<int> { (int)x }, game.GetNextMoves());
+                }
+                Render();
+                return;
             }
-                // if the click does not make much sense we deselect and continue
+            // if the click does not make much sense we deselect and continue
             Deselect();
             Render();
         }
@@ -203,18 +200,15 @@ namespace Backgammon
         void SelectBar(int color)
         {
             int firstindex = (MAXTILE + 1 + color) % (MAXTILE + 2);
-            if (!game.GameOver() && game.GetRolled())
+            if (!game.GameOver() && game.GetRolled() && game.GetNextMoves().Contains(firstindex - color))
             {
-                if (game.GetNextMoves().Contains(firstindex - color))
+                if (game.GetSelected() == null)
                 {
-                    if (game.GetSelected() == null)
-                    {
-                        game.SetSelected(firstindex - color);
-                        game.GenNextMoves(gamestate);
-                        engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                        engine.SetSelect(new HashSet<int> { firstindex - color }, game.GetNextMoves());
-                        return;
-                    }
+                    game.SetSelected(firstindex - color);
+                    game.GenNextMoves(gamestate);
+                    engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
+                    engine.SetSelect(new HashSet<int> { firstindex - color }, game.GetNextMoves());
+                    return;
                 }
             }
             Deselect();
@@ -227,36 +221,33 @@ namespace Backgammon
             int lastindex = (MAXTILE + 1 - color) % (MAXTILE + 2);
             if (!game.GameOver() && game.GetRolled())
             {
-                if (game.GetNextMoves().Contains(lastindex + color))
+                if (game.GetNextMoves().Contains(lastindex + color) && game.GetSelected() != null)
                 {
-                    if (game.GetSelected() != null)
+                    game.PlayValidTo((int)lastindex + color, gamestate);
+                    engine.PlayMoved();
+                    if (game.GameOver())
                     {
-                        game.PlayValidTo((int)lastindex + color, gamestate);
-                        engine.PlayMoved();
-                        if (game.GameOver())
-                        {
-                            // GameOver must change during this function or the resign function
-                            // in this case the player in turn won
-                            engine.SetResult(gamestate.GetColor());
-                            engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                            engine.ClearSelect();
-                            game.SetRolled(true);
-                        }
-                        else
-                        {
-                            if (game.GetDouble() > 0)
-                            {
-                                engine.SetDouble(game.GetDouble());
-                            }
-                            game.SetSelected(null);
-                            engine.ClearSelect();
-                            game.GenNextMoves(gamestate);
-                            engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                            engine.SetSelect(null, game.GetNextMoves());
-                            IfTurnOver();
-                        }
-                        return;
+                        // GameOver must change during this function or the resign function
+                        // in this case the player in turn won
+                        engine.SetResult(gamestate.GetColor());
+                        engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
+                        engine.ClearSelect();
+                        game.SetRolled(true);
                     }
+                    else
+                    {
+                        if (game.GetDouble() > 0)
+                        {
+                            engine.SetDouble(game.GetDouble());
+                        }
+                        game.SetSelected(null);
+                        engine.ClearSelect();
+                        game.GenNextMoves(gamestate);
+                        engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
+                        engine.SetSelect(null, game.GetNextMoves());
+                        IfTurnOver();
+                    }
+                    return;
                 }
 
             }

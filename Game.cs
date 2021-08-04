@@ -132,7 +132,7 @@ namespace Backgammon
                     }
                     else
                     {
-                        if (to == MAXTILE + 1 || to == - 1)
+                        if (to == MAXTILE + 1 || to == -1)
                         {
                             return true;
                         }
