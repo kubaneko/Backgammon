@@ -287,13 +287,13 @@ namespace Backgammon
         {
             if (color == 1)
             {
-                info = "White Won";
+                info = "WHITE WON";
             }
             else
             {
                 if (color == -1)
                 {
-                    info = "Black Won";
+                    info = "BLACK WON";
                 }
             }
         }

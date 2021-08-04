@@ -7,14 +7,18 @@ namespace Backgammon
 {
     public partial class Form1 : Form
     {
+        /* The WinForm
+         */
+
         Game game = new Game();
         Gamestate gamestate;
         Engine engine = new Engine();
+        //constant
         const int MAXTILE = 23;
         public Form1()
         {
-            int color = game.NewToPlay();
-            gamestate = new Gamestate(color);
+            // getting new game started and graphics ready
+            gamestate = new Gamestate(game.NewToPlay());
             InitializeComponent();
             engine.SetBorders(splitter1.Width + splitter1.Location.X, this.Width - splitter2.Location.X);
             engine.ySetBorder(this.Height - splitter1.Location.Y - splitter1.Height);
@@ -22,11 +26,16 @@ namespace Backgammon
             engine.ySetWindowSize(this.Height);
         }
 
+        // BUTTONS
+
+        // Rolling the dice
         private void Dice_Click(object sender, EventArgs e)
         {
+            // if we have not rolled the dice we eill
             if (game.Roll())
             {
                 engine.PlayDice();
+                // prepare moves to be selected/stressed
                 game.GenNextMoves(gamestate);
                 engine.SetSelect(null, game.GetNextMoves());
                 if ((int)game.GetDice1() == (int)game.GetDice2())
@@ -45,7 +54,7 @@ namespace Backgammon
                 Deselect();
             }
         }
-
+        // Setting up a new game
         private void NGame_Click(object sender, EventArgs e)
         {
             gamestate = new Gamestate(game.NewToPlay());
@@ -57,6 +66,7 @@ namespace Backgammon
             Render();
         }
 
+        // resigning
         private void Resign_Click(object sender, EventArgs e)
         {
             if (!game.GameOver())
@@ -69,6 +79,9 @@ namespace Backgammon
             }
         }
 
+        //Resizing and stuff
+
+        // sets new window size
         private void FormShown(object sender, EventArgs e)
         {
             engine.xSetWindowSize(this.Width);
@@ -83,15 +96,20 @@ namespace Backgammon
             Render();
         }
 
+        // main function for use of the game
         private void FormClicked(object sender, MouseEventArgs e)
         {
+            // we get the tile clicked
             int? x = engine.ClickedTile(e.X, e.Y);
             if (x != null && !game.GameOver() && game.GetRolled())
             {
+                // if the move is within board and makes sense to click on the tile
+                // we look whether selecting the tile is valid
                 if (game.GetNextMoves().Contains((int)x))
                 {
                     if (game.GetSelected() != null)
                     {
+                        // we move the stone reset stressed and next tiles if the turn is not over we shown the new ones
                         game.PlayValidTo((int)x, gamestate);
                         engine.PlayMoved();
                         if (game.GetDouble() > 0)
@@ -107,39 +125,23 @@ namespace Backgammon
                     }
                     else
                     {
+                        // we select the stone and generate moves for it
                         game.SetSelected((int)x);
                         game.GenNextMoves(gamestate);
                         engine.SetSelect(new HashSet<int> { (int)x }, game.GetNextMoves());
                     }
-                }
-                else
-                {
-                    Deselect();
+                    Render();
+                    return;
                 }
             }
-            else
-            {
-                Deselect();
-            }
+                // if the click does not make much sense we deselect and continue
+            Deselect();
             Render();
         }
-        void Render()
-        {
-            using (Graphics g = CreateGraphics())
-            {
-                engine.RenderBoard(gamestate, g);
-                engine.RenderBarScore(WScoreLabel, gamestate.GetWScore(), BScoreLabel, gamestate.GetBScore(), WBarLabel, gamestate.GetWBar(), BBarLabel, gamestate.GetBBar());
-                engine.RenderDice(game.GetDice1(), game.GetDice2(), pictureBox2, pictureBox3, game.GetDouble());
-                engine.RenderInfo(label11);
-                engine.RenderStressed(g,
-                    gamestate.GetColor() == 1 ? WBarBox : BBarBox,
-                    gamestate.GetColor() == 1 ? WScoreBox : BScoreBox,
-                    gamestate);
-            }
-        }
 
+        // LABEL AND PICTUREBOX CONTROLS
 
-
+        // selecting bar or not
         private void BBar_Click(object sender, EventArgs e)
         {
             if (gamestate.GetColor() == -1)
@@ -167,7 +169,7 @@ namespace Backgammon
 
         }
 
-
+        // moving to Score or not
         private void WScore_Click(object sender, EventArgs e)
         {
             if (gamestate.GetColor() == 1)
@@ -196,7 +198,7 @@ namespace Backgammon
 
         }
 
-
+        // method that moves from bar - similar to FormClicked
 
         void SelectBar(int color)
         {
@@ -211,19 +213,15 @@ namespace Backgammon
                         game.GenNextMoves(gamestate);
                         engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
                         engine.SetSelect(new HashSet<int> { firstindex - color }, game.GetNextMoves());
+                        return;
                     }
                 }
-                else
-                {
-                    Deselect();
-                }
             }
-            else
-            {
-                Deselect();
-            }
-            Render();
+            Deselect();
         }
+
+        // method that scores - similar to FormClicked
+
         void PlayToScore(int color)
         {
             int lastindex = (MAXTILE + 1 - color) % (MAXTILE + 2);
@@ -237,6 +235,8 @@ namespace Backgammon
                         engine.PlayMoved();
                         if (game.GameOver())
                         {
+                            // GameOver must change during this function or the resign function
+                            // in this case the player in turn won
                             engine.SetResult(gamestate.GetColor());
                             engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
                             engine.ClearSelect();
@@ -255,23 +255,17 @@ namespace Backgammon
                             engine.SetSelect(null, game.GetNextMoves());
                             IfTurnOver();
                         }
-                    }
-                    else
-                    {
-                        Deselect();
+                        return;
                     }
                 }
-                else
-                {
-                    Deselect();
-                }
+
             }
-            else
-            {
-                Deselect();
-            }
+            Deselect();
         }
 
+        //METHODS TO SAVE SPACE
+
+        // If there are no more moves we change the turn and inform the player
         void IfTurnOver()
         {
             if (!game.RemainMoves())
@@ -282,7 +276,7 @@ namespace Backgammon
                 engine.SetTurn(TurnBox, gamestate.GetColor());
             }
         }
-
+        // nulls the selected tile andgenerates new tiles to be selected
         void Deselect()
         {
             if (game.GetSelected() != null)
@@ -292,6 +286,21 @@ namespace Backgammon
                 game.GenNextMoves(gamestate);
                 engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
                 engine.SetSelect(null, game.GetNextMoves());
+            }
+        }
+        void Render()
+        {
+            // rendering everything method only because there are a lot of controlls that need to be passed
+            using (Graphics g = CreateGraphics())
+            {
+                engine.RenderBoard(gamestate, g);
+                engine.RenderBarScore(WScoreLabel, gamestate.GetWScore(), BScoreLabel, gamestate.GetBScore(), WBarLabel, gamestate.GetWBar(), BBarLabel, gamestate.GetBBar());
+                engine.RenderDice(game.GetDice1(), game.GetDice2(), pictureBox2, pictureBox3, game.GetDouble());
+                engine.RenderInfo(label11);
+                engine.RenderStressed(g,
+                    gamestate.GetColor() == 1 ? WBarBox : BBarBox,
+                    gamestate.GetColor() == 1 ? WScoreBox : BScoreBox,
+                    gamestate);
             }
         }
     }
