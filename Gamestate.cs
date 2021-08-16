@@ -15,9 +15,6 @@
         int BScore = 0;
         // Is equal to one on White players turn and -1 on Black Players Turn
         int Color = 1;
-        // constants of the game, MAXTILE is maximum tile to be able to play to or from
-        const int MAXTILE = 23;
-        const int MAXSCORE = 15;
 
         public Gamestate(int[] desk, int bBar, int wBar, int wScore, int bscore, int color)
         {
@@ -33,7 +30,7 @@
         {
             Color = color;
             // standard way starting point on the desk
-            Desk = new int[MAXTILE + 1] { 2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2 };
+            Desk = new int[Constants.MAXTILE + 1] { 2, 0, 0, 0, 0, -5, 0, -3, 0, 0, 0, 5, -5, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, -2 };
             BBar = 0;
             WBar = 0;
             WScore = 0;
@@ -61,11 +58,11 @@
         // returns color of the player who won or null
         public int? Won()
         {
-            if (WScore == MAXSCORE)
+            if (WScore == Constants.MAXSCORE)
             {
                 return 1;
             }
-            if (BScore == MAXSCORE)
+            if (BScore == Constants.MAXSCORE)
             {
                 return -1;
             }
@@ -118,7 +115,7 @@
         public bool HomeRowFull()
         {
             int DisksInHome = 0;
-            int index = ((MAXTILE + 1) - Color) % (MAXTILE + 2);
+            int index = ((Constants.MAXTILE + 1) - Color) % (Constants.MAXTILE + 2);
             // Index of last Tile for the player in his Home Row
             for (int i = 0; i < 6; ++i)
             {
@@ -126,14 +123,14 @@
                     DisksInHome += Color * Desk[index];
                 index -= Color;
             }
-            return DisksInHome == MAXSCORE - GetScore();
+            return DisksInHome == Constants.MAXSCORE - GetScore();
         }
 
         // returns whether there are stones before the stone in the homerow
         // used to calculate whether you can use a greater number on the dice to score
         public bool IsLastInHomerow(int stone)
         {
-            int LastIndex = ((MAXTILE + 1) - Color) % (MAXTILE + 2) - 5 * Color;
+            int LastIndex = ((Constants.MAXTILE + 1) - Color) % (Constants.MAXTILE + 2) - 5 * Color;
             for (int i = LastIndex; i * Color < stone * Color; i += Color)
             {
                 if (Desk[i] * Color > 0)

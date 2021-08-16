@@ -5,6 +5,14 @@ namespace Backgammon
 {
     static class Program
     {
+        public static Form1 Form1
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
         /// <summary>
         /// Hlavní vstupní bod aplikace.
         /// </summary>

@@ -27,8 +27,6 @@ namespace Backgammon
         // Win Conditions
         bool BlackWon = false;
         bool WhiteWon = false;
-        // constants
-        const int MAXTILE = 23;
 
         // Returns if the game is over
         public bool GameOver()
@@ -121,7 +119,7 @@ namespace Backgammon
         // Returns if a move is valid
         public bool ValidMoveTo(Gamestate game, int from, int to)
         {
-            if (to > MAXTILE || to < 0)
+            if (to > Constants.MAXTILE || to < 0)
             {
                 // Scoring or moving stones from bar
                 if (game.HomeRowFull())
@@ -132,7 +130,7 @@ namespace Backgammon
                     }
                     else
                     {
-                        if (to == MAXTILE + 1 || to == -1)
+                        if (to == Constants.MAXTILE + 1 || to == -1)
                         {
                             return true;
                         }
@@ -150,9 +148,9 @@ namespace Backgammon
         public void GenNextMoves(Gamestate gamestate)
         {
             int color = gamestate.GetColor();
-            int firstindex = ((MAXTILE + 1) + color) % (MAXTILE + 2);
+            int firstindex = ((Constants.MAXTILE + 1) + color) % (Constants.MAXTILE + 2);
             // First Tile for the player (after bar)
-            int lastindex = ((MAXTILE + 1) - color) % (MAXTILE + 2);
+            int lastindex = ((Constants.MAXTILE + 1) - color) % (Constants.MAXTILE + 2);
             ClearNext();
             if (Selected == null)
             {
@@ -190,8 +188,8 @@ namespace Backgammon
         {
             // Plays a valid move from selected to To
             int color = state.GetColor();
-            int firstindex = ((MAXTILE + 1) + color) % (MAXTILE + 2);
-            int lastindex = ((MAXTILE + 1) - color) % (MAXTILE + 2);
+            int firstindex = ((Constants.MAXTILE + 1) + color) % (Constants.MAXTILE + 2);
+            int lastindex = ((Constants.MAXTILE + 1) - color) % (Constants.MAXTILE + 2);
             // if the moves is to score
             if (color * to > lastindex * color)
             {
@@ -284,9 +282,9 @@ namespace Backgammon
         // Makes the move be from MAXTILE+1 to MINTILE-1
         int NormalizeMove(int i)
         {
-            if (i > MAXTILE)
+            if (i > Constants.MAXTILE)
             {
-                return MAXTILE + 1;
+                return Constants.MAXTILE + 1;
             }
             if (i < 0)
             {

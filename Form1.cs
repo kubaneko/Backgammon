@@ -13,8 +13,7 @@ namespace Backgammon
         Game game = new Game();
         Gamestate gamestate;
         Engine engine = new Engine();
-        //constant
-        const int MAXTILE = 23;
+
         public Form1()
         {
             // getting new game started and graphics ready
@@ -24,6 +23,30 @@ namespace Backgammon
             engine.ySetBorder(this.Height - splitter1.Location.Y - splitter1.Height);
             engine.xSetWindowSize(this.Width);
             engine.ySetWindowSize(this.Height);
+        }
+
+        public Engine Engine
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public Game Game
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public Gamestate Gamestate
+        {
+            get => default;
+            set
+            {
+            }
         }
 
         // BUTTONS
@@ -61,8 +84,9 @@ namespace Backgammon
             game.Reset();
             game.ClearNext();
             engine.ClearSelect();
-            engine.ClearInfo();
             engine.SetSelect(null, game.GetNextMoves());
+            engine.RenderTurn(TurnBox, gamestate.GetColor());
+            engine.ClearInfo();
             Render();
         }
 
@@ -86,6 +110,8 @@ namespace Backgammon
         {
             engine.xSetWindowSize(this.Width);
             engine.ySetWindowSize(this.Height);
+            engine.RenderTurn(TurnBox, gamestate.GetColor());
+            engine.ClearInfo();
             Render();
         }
 
@@ -199,7 +225,7 @@ namespace Backgammon
 
         void SelectBar(int color)
         {
-            int firstindex = (MAXTILE + 1 + color) % (MAXTILE + 2);
+            int firstindex = (Constants.MAXTILE + 1 + color) % (Constants.MAXTILE + 2);
             if (!game.GameOver() && game.GetRolled() && game.GetNextMoves().Contains(firstindex - color))
             {
                 if (game.GetSelected() == null)
@@ -218,7 +244,7 @@ namespace Backgammon
 
         void PlayToScore(int color)
         {
-            int lastindex = (MAXTILE + 1 - color) % (MAXTILE + 2);
+            int lastindex = (Constants.MAXTILE + 1 - color) % (Constants.MAXTILE + 2);
             if (!game.GameOver() && game.GetRolled())
             {
                 if (game.GetNextMoves().Contains(lastindex + color) && game.GetSelected() != null)
@@ -264,7 +290,7 @@ namespace Backgammon
                 gamestate.Turn();
                 game.Turn();
                 engine.ClearSelect();
-                engine.SetTurn(TurnBox, gamestate.GetColor());
+                engine.RenderTurn(TurnBox, gamestate.GetColor());
             }
         }
         // nulls the selected tile andgenerates new tiles to be selected

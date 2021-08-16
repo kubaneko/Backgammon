@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Backgammon.Form1">
+    <Position X="3.5" Y="2" Width="1.5" />
+    <Members>
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>oAAAiBBBIKSABDQAAgCAAIAKEIh4IAIIBhAAGEQAAAA=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Engine" />
+      <Property Name="Game" />
+      <Property Name="Gamestate" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backgammon.Game">
+    <Position X="6.5" Y="1" Width="1.5" />
+    <Members>
+      <Method Name="ExistsDiceMove" Hidden="true" />
+      <Method Name="GetDiceMoves" Hidden="true" />
+      <Method Name="NormalizeMove" Hidden="true" />
+      <Method Name="NullDice" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gAACiICwAASABAAOAGACAIAAAEBCAAAARIAhAEgAAiI=</HashCode>
+      <FileName>Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Backgammon.Gamestate">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <Members>
+      <Method Name="MoveTo" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ARAAAEABAIQAgAgAAAACAAQAACBaAAqAAABAgAAAABA=</HashCode>
+      <FileName>Gamestate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Backgammon.Program" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Form1" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backgammon.Engine">
+    <Position X="3.5" Y="7.25" Width="1.5" />
+    <Members>
+      <Method Name="DrawStress" Hidden="true" />
+      <Method Name="xGetTileCoordinates" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>RYCQEAYCAAFCCAAESBCEAEACAQAAQGQBRAAAwAALBCg=</HashCode>
+      <FileName>Engine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

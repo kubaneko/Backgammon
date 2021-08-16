@@ -42,9 +42,6 @@ namespace Backgammon
         int yBorder;
         // information to be displayed
         string info = "";
-        // constants
-        const int MAXTILE = 23;
-        const int MINTILE = 0;
 
 
         // Calculating Boardsize
@@ -77,7 +74,7 @@ namespace Backgammon
                 // size of the gaps between stones so they all fit
                 double yDiffPixels = (yFractionOfStrip * BoardSizey - StonePixels) / 14;
                 // displaying stones for every tile
-                for (int i = 0; i < MAXTILE + 1; ++i)
+                for (int i = 0; i < Constants.MAXTILE + 1; ++i)
                 {
                     // their color and coordinates
                     int colour = Math.Sign(state.GetTile(i));
@@ -103,7 +100,7 @@ namespace Backgammon
         }
 
         // changes turn visually
-        public void SetTurn(PictureBox turn, int color)
+        public void RenderTurn(PictureBox turn, int color)
         {
             info = "Your turn is Over";
             if (color == 1)
@@ -115,6 +112,7 @@ namespace Backgammon
                 turn.Image = black;
             }
         }
+
 
         // Renders Dice
         public void RenderDice(int? dice1, int? dice2, PictureBox d1, PictureBox d2, int? Double)
@@ -158,7 +156,7 @@ namespace Backgammon
                 Color S = (Select.Count == 1) ? Color.Red : Color.Blue;
                 foreach (int i in Select)
                 {
-                    if (i < MINTILE || i > MAXTILE)
+                    if (i < 0 || i > Constants.MAXTILE)
                     {
                         Bar.BackColor = S;
                     }
@@ -173,10 +171,10 @@ namespace Backgammon
                 Color ToS = Color.Green;
                 foreach (int j in ToSelect)
                 {
-                    if (j == MINTILE - 1 || j == MAXTILE + 1)
+                    if (j == 0 - 1 || j == Constants.MAXTILE + 1)
                     {
                         int color = gamestate.GetColor();
-                        int bar = (MAXTILE + 1 + color) % (MAXTILE + 2) - color;
+                        int bar = (Constants.MAXTILE + 1 + color) % (Constants.MAXTILE + 2) - color;
                         if (j == bar)
                         {
                             Bar.BackColor = ToS;
