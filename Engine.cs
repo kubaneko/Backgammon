@@ -11,7 +11,7 @@ namespace Backgammon
          */
 
         // Tiles to be stressed
-        HashSet<int> Select = new HashSet<int>();
+        HashSet<int> Selected = new HashSet<int>();
         HashSet<int> ToSelect = new HashSet<int>();
         //Graphics and sounds
         Bitmap white = Backgammon.Properties.Resources.WDot;
@@ -151,18 +151,27 @@ namespace Backgammon
         // Renders stressed tiles and stresses bar and score if needed
         public void RenderStressed(Graphics g, PictureBox Bar, PictureBox Score, Gamestate gamestate)
         {
-            if (Select != null)
+            if (Selected != null)
             {
-                Color S = (Select.Count == 1) ? Color.Red : Color.Blue;
-                foreach (int i in Select)
+                Color S = Color.Red;
+                foreach (int j in Selected)
                 {
-                    if (i < 0 || i > Constants.MAXTILE)
+                    if (j == 0 - 1 || j == Constants.MAXTILE + 1)
                     {
-                        Bar.BackColor = S;
+                        int color = gamestate.GetColor();
+                        int bar = (Constants.MAXTILE + 1 + color) % (Constants.MAXTILE + 2) - color;
+                        if (j == bar)
+                        {
+                            Bar.BackColor = S;
+                        }
+                        else
+                        {
+                            Score.BackColor = S;
+                        }
                     }
                     else
                     {
-                        DrawStress(g, S, i);
+                        DrawStressS(g, S, j);
                     }
                 }
             }
@@ -186,18 +195,32 @@ namespace Backgammon
                     }
                     else
                     {
-                        DrawStress(g, ToS, j);
+                        DrawStressToS(g, ToS, j);
                     }
                 }
             }
         }
-        // draws the rectagles used for stressing
-        private void DrawStress(Graphics g, Color ToS, int j)
+        // draws the rectagles used for stressing To be selected Tiles
+        private void DrawStressToS(Graphics g, Color ToS, int Tile)
         {
-            Rectangle rect = new Rectangle((int)Math.Ceiling(xGetTileCoordinates(j)),
-                j > 11 ? 0 : (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder)),
+            Rectangle rect = new Rectangle((int)Math.Ceiling(xGetTileCoordinates(Tile)),
+                Tile > 11 ? 0: (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder/2)),
                 (int)Math.Floor(BoardSizex * xFractionOfStrip),
-                (int)Math.Floor(BoardSizey * yFractionOfBorder));
+                (int)Math.Floor(BoardSizey * yFractionOfBorder/2));
+            using (Pen p = new Pen(ToS))
+            {
+                g.DrawRectangle(p, rect);
+                g.FillRectangle(p.Brush, rect);
+            }
+        }
+
+        // draws the rectagles used for stressing Selected Tiles
+        private void DrawStressS(Graphics g, Color ToS, int Tile)
+        {
+            Rectangle rect = new Rectangle((int)Math.Ceiling(xGetTileCoordinates(Tile)),
+                Tile > 11 ? (int)Math.Ceiling(BoardSizey*yFractionOfBorder/2) : (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder)),
+                (int)Math.Floor(BoardSizex * xFractionOfStrip),
+                (int)Math.Floor(BoardSizey * yFractionOfBorder / 2));
             using (Pen p = new Pen(ToS))
             {
                 g.DrawRectangle(p, rect);
@@ -258,16 +281,31 @@ namespace Backgammon
             return ((Math.Abs(tile - 11.5) - 0.5) * xFractionOfStrip + xFractionOfBorder + xFractionBar * ((int)(Math.Abs((double)tile - 11.5) - 0.5) / 6)) * BoardSizex + Menu1;
         }
 
-        // sets stressed tiles/constrols)
+        // sets stressed tiles/constrols
         public void SetSelect(HashSet<int> S, HashSet<int> ToS)
         {
-            Select = S;
+            if (S != null)
+            {
+                Selected = S;
+            }
+            else
+            {
+                Selected.Clear();
+            }
+            ToSelect = ToS;
+        }
+
+        // sets stressed tiles/constrols there is only one mve Selected
+        public void SetSelect(int S, HashSet<int> ToS)
+        {
+            Selected.Clear();
+            Selected.Add((int)S);
             ToSelect = ToS;
         }
         // clears the stressed tiles/controls
         public void ClearSelect()
         {
-            Select = null;
+            Selected.Clear();
             ToSelect = null;
         }
         // Clears the info

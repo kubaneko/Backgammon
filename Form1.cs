@@ -13,6 +13,7 @@ namespace Backgammon
         Game game = new Game();
         Gamestate gamestate;
         Engine engine = new Engine();
+        RandomPlayer rplayer = new RandomPlayer();
 
         public Form1()
         {
@@ -57,6 +58,8 @@ namespace Backgammon
             // if we have not rolled the dice we eill
             if (game.Roll())
             {
+                engine.RenderTurn(TurnBox, gamestate.GetColor());
+                engine.ClearSelect();
                 engine.PlayDice();
                 // prepare moves to be selected/stressed
                 game.GenNextMoves(gamestate);
@@ -152,7 +155,7 @@ namespace Backgammon
                     // we select the stone and generate moves for it
                     game.SetSelected((int)x);
                     game.GenNextMoves(gamestate);
-                    engine.SetSelect(new HashSet<int> { (int)x }, game.GetNextMoves());
+                    engine.SetSelect((int)x, game.GetNextMoves());
                 }
                 Render();
                 return;
@@ -233,7 +236,7 @@ namespace Backgammon
                     game.SetSelected(firstindex - color);
                     game.GenNextMoves(gamestate);
                     engine.ClearPictures(WScoreBox, BScoreBox, BBarBox, WBarBox);
-                    engine.SetSelect(new HashSet<int> { firstindex - color }, game.GetNextMoves());
+                    engine.SetSelect(firstindex - color, game.GetNextMoves());
                     return;
                 }
             }
@@ -291,7 +294,33 @@ namespace Backgammon
                 game.Turn();
                 engine.ClearSelect();
                 engine.RenderTurn(TurnBox, gamestate.GetColor());
-            }
+                if (gamestate.GetColor() == -1 && rplayer.PlaysAsBlack1)
+                {
+                    game.Roll();
+                    engine.PlayDice();
+                    if ((int)game.GetDice1() == (int)game.GetDice2())
+                    {
+                        engine.SetDouble(game.GetDouble());
+                    }
+                    else
+                    {
+                        engine.ClearInfo();
+                    }
+                    Render();
+                    if (rplayer.PlaysAtOnce1)
+                    {
+                        rplayer.FinishTurn(game, gamestate);
+                        engine.SetSelect(rplayer.GetFrom(), rplayer.GetTo());
+                        game.SetSelected(null);
+                        RenderWithoutDice();
+                        if (!game.RemainMoves())
+                        {
+                            gamestate.Turn();
+                            game.Turn();
+                        }
+                    }
+                    }
+                }
         }
         // nulls the selected tile andgenerates new tiles to be selected
         void Deselect()
@@ -318,6 +347,109 @@ namespace Backgammon
                     gamestate.GetColor() == 1 ? WBarBox : BBarBox,
                     gamestate.GetColor() == 1 ? WScoreBox : BScoreBox,
                     gamestate);
+            }
+        }
+
+        void RenderWithoutDice()
+        {
+            // rendering everything but dice
+            using (Graphics g = CreateGraphics())
+            {
+                engine.RenderBoard(gamestate, g);
+                engine.RenderBarScore(WScoreLabel, gamestate.GetWScore(), BScoreLabel, gamestate.GetBScore(), WBarLabel, gamestate.GetWBar(), BBarLabel, gamestate.GetBBar());
+                engine.RenderInfo(label11);
+                engine.RenderStressed(g,
+                    gamestate.GetColor() == 1 ? WBarBox : BBarBox,
+                    gamestate.GetColor() == 1 ? WScoreBox : BScoreBox,
+                    gamestate);
+            }
+        }
+
+        private void RPlayerBlackChanged(object sender, EventArgs e)
+        {
+            rplayer.PlaysAsBlack1 = checkBox1.Checked;
+            if (!checkBox1.Checked)
+            {
+                checkBox2.Enabled = false;
+                button4.Enabled = false;
+                Deselect();
+            }
+            else
+            {
+                checkBox2.Enabled = true;
+                if (checkBox2.Checked)
+                {
+                    button4.Enabled = true;
+                }
+                else
+                {
+                    if (gamestate.GetColor()==-1)
+                    {
+                        if (game.Roll())
+                        {
+                            engine.PlayDice();
+                            if ((int)game.GetDice1() == (int)game.GetDice2())
+                            {
+                                engine.SetDouble(game.GetDouble());
+                            }
+                            else
+                            {
+                                engine.ClearInfo();
+                            }
+                            Render();
+                        }
+                        rplayer.FinishTurn(game, gamestate);
+                        engine.SetSelect(rplayer.GetFrom(), rplayer.GetTo());
+                        game.SetSelected(null);
+                        RenderWithoutDice();
+                        if (!game.RemainMoves())
+                        {
+                            gamestate.Turn();
+                            game.Turn();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void RPlayerMovePerMChanged(object sender, EventArgs e)
+        {
+            rplayer.PlaysAtOnce1 = !checkBox2.Checked;
+            if (!checkBox2.Checked)
+            {
+                button4.Enabled = false;
+                if (gamestate.GetColor() == -1)
+                {
+                    game.Roll();
+                    Render();
+                    rplayer.FinishTurn(game, gamestate);
+                    RenderWithoutDice();
+                }
+            }
+            else
+            {
+                button4.Enabled = true;
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (gamestate.GetColor() == -1)
+            {
+                game.Roll();
+                rplayer.PlayMove(game,gamestate);
+                IfTurnOver();
+                engine.SetSelect(rplayer.GetFrom(), rplayer.GetTo());
+                Render();
+                if (!game.RemainMoves())
+                {
+                    gamestate.Turn();
+                    game.Turn();
+                }
+            }
+            else
+            {
+                Deselect();
             }
         }
     }
