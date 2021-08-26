@@ -68,14 +68,14 @@
       <Compartment Name="Properties" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AggAAAAAAAACAAAABABAgAAAAAAoAAAACIABAAAAAIA=</HashCode>
+      <HashCode>AggAAAAAAAACAAQABAAAgAAAAAAIAAAACIABAAAAAIA=</HashCode>
       <FileName>RandomPlayer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Backgammon.Constants" Collapsed="true">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAQAAAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Constants.cs</FileName>
     </TypeIdentifier>
   </Class>
