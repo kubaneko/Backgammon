@@ -13,14 +13,14 @@ namespace Backgammon
 
         Random r = new Random();
         // Whether it is active
-        bool PlaysAsBlack = false;
+        bool Plays = false;
         // whether it plays all moves left in a turn or plays a move when a button is pressed
         bool PlaysMPM = true;
         // sets to remember and display from to where were the moves played
         HashSet<int> From = new HashSet<int>();
         HashSet<int> To = new HashSet<int>();
 
-        public bool PlaysAsBlack1 { get => PlaysAsBlack; set => PlaysAsBlack = value; }
+        public bool Plays1 { get => Plays; set => Plays = value; }
         public bool PlaysAtOnce1 { get => PlaysMPM; set => PlaysMPM = value; }
 
         // if it plays as black it plays a random move and updates the hashsets to display the move

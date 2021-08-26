@@ -55,7 +55,7 @@ namespace Backgammon
         // Then we chack whether Random Player plays at once if so we let it Finish the Turn then we Check Whether the turn or Game is over
         private void RPlayerPlays()
         {
-            if (gamestate.GetColor() == -1 && rplayer.PlaysAsBlack1 && !game.GameOver())
+            if (gamestate.GetColor() == Constants.RPLAYERCOLOR && rplayer.Plays1 && !game.GameOver())
             {
                 if (game.Roll())
                 {
@@ -103,7 +103,7 @@ namespace Backgammon
                 engine.RenderBarScore(WScoreLabel, gamestate.GetWScore(), BScoreLabel, gamestate.GetBScore(), WBarLabel, gamestate.GetWBar(), BBarLabel, gamestate.GetBBar());
 
                 // We want the player see what the RPlayer rolled if it plays at once so if it finished the turn we do not render the null dice
-                if (!rplayer.PlaysAsBlack1 || !rplayer.PlaysAtOnce1 || gamestate.GetColor() != -1 || game.RemainMoves())
+                if (!rplayer.Plays1 || !rplayer.PlaysAtOnce1 || gamestate.GetColor() != Constants.RPLAYERCOLOR || game.RemainMoves())
                 {
                     engine.RenderDice(game.GetDice1(), game.GetDice2(), pictureBox2, pictureBox3, game.GetDouble());
                 }
@@ -229,7 +229,7 @@ namespace Backgammon
         // resigning turn starts after rolling dice, and you can not resign for the Random Player
         private void Resign_Click(object sender, EventArgs e)
         {
-            if (!game.GameOver() && (!rplayer.PlaysAsBlack1 || gamestate.GetColor() != -1) && game.GetRolled())
+            if (!game.GameOver() && (!rplayer.Plays1 || gamestate.GetColor() != Constants.RPLAYERCOLOR) && game.GetRolled())
             {
                 game.SetResult(gamestate.GetColor());
                 engine.SetResult(gamestate.GetColor() * -1);
@@ -246,7 +246,7 @@ namespace Backgammon
             if (!game.GameOver())
             {
                 Deselect();
-                if (gamestate.GetColor() == -1 && rplayer.PlaysAsBlack1)
+                if (gamestate.GetColor() == Constants.RPLAYERCOLOR && rplayer.Plays1)
                 {
                     game.GenNextMoves(gamestate);
                     if (game.RemainMoves())
@@ -287,7 +287,7 @@ namespace Backgammon
         // main function for use of the game
         private void FormClicked(object sender, MouseEventArgs e)
         {
-            if (!game.GameOver() && (!rplayer.PlaysAsBlack1 || gamestate.GetColor() != -1))
+            if (!game.GameOver() && (!rplayer.Plays1 || gamestate.GetColor() != Constants.RPLAYERCOLOR))
             {
                 // we get the tile clicked
                 int? x = engine.ClickedTile(e.X, e.Y);
@@ -335,7 +335,7 @@ namespace Backgammon
         // selecting bar or not
         private void BBar_Click(object sender, EventArgs e)
         {
-            if (gamestate.GetColor() == -1 && !rplayer.PlaysAsBlack1)
+            if (gamestate.GetColor() == -1 && (-1!=Constants.RPLAYERCOLOR || !rplayer.Plays1))
             {
                 SelectBar(-1);
             }
@@ -348,7 +348,7 @@ namespace Backgammon
         }
         private void WBar_Click(object sender, EventArgs e)
         {
-            if (gamestate.GetColor() == 1)
+            if (gamestate.GetColor() == 1 && (1 != Constants.RPLAYERCOLOR || !rplayer.Plays1))
             {
                 SelectBar(1);
             }
@@ -363,7 +363,7 @@ namespace Backgammon
         // moving to Score or not
         private void WScore_Click(object sender, EventArgs e)
         {
-            if (gamestate.GetColor() == 1)
+            if (gamestate.GetColor() == 1 && (1 != Constants.RPLAYERCOLOR || !rplayer.Plays1))
             {
                 PlayToScore(1);
             }
@@ -377,7 +377,7 @@ namespace Backgammon
 
         private void BScore_Click(object sender, EventArgs e)
         {
-            if (gamestate.GetColor() == -1 && !rplayer.PlaysAsBlack1)
+            if (gamestate.GetColor() == -1 && (-1 != Constants.RPLAYERCOLOR || !rplayer.Plays1))
             {
                 PlayToScore(-1);
             }
@@ -396,7 +396,7 @@ namespace Backgammon
         // If active the RPlayer Plays
         private void RPlayerBlackChanged(object sender, EventArgs e)
         {
-            rplayer.PlaysAsBlack1 = checkBox1.Checked;
+            rplayer.Plays1 = checkBox1.Checked;
             if (!checkBox1.Checked)
             {
                 checkBox2.Enabled = false;
