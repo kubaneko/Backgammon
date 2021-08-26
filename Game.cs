@@ -106,7 +106,7 @@ namespace Backgammon
         // Tells whether there are moves remaining
         public bool RemainMoves()
         {
-            return ((dice1 != null || dice2 != null) && !(dice1 != null && dice2 != null && dice1 == dice2 && Double == 0) && NextMoves.Count() > 0);
+            return ((dice1 != null || dice2 != null) && !(dice1 != null && dice2 != null && dice1 == dice2 && Double == 0) && NextMoves.Count() > 0 || !rolled);
         }
         // resets for next turn
         public void Turn()
@@ -301,6 +301,9 @@ namespace Backgammon
             dice2 = null;
             BlackWon = false;
             WhiteWon = false;
+            ClearNext();
+            SetSelected(null);
+
         }
         // Some getters and setters
         public HashSet<int> GetNextMoves()

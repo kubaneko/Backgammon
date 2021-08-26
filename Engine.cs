@@ -204,9 +204,9 @@ namespace Backgammon
         private void DrawStressToS(Graphics g, Color ToS, int Tile)
         {
             Rectangle rect = new Rectangle((int)Math.Ceiling(xGetTileCoordinates(Tile)),
-                Tile > 11 ? 0: (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder/2)),
+                Tile > 11 ? 0 : (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder / 2)),
                 (int)Math.Floor(BoardSizex * xFractionOfStrip),
-                (int)Math.Floor(BoardSizey * yFractionOfBorder/2));
+                (int)Math.Floor(BoardSizey * yFractionOfBorder / 2));
             using (Pen p = new Pen(ToS))
             {
                 g.DrawRectangle(p, rect);
@@ -218,7 +218,7 @@ namespace Backgammon
         private void DrawStressS(Graphics g, Color ToS, int Tile)
         {
             Rectangle rect = new Rectangle((int)Math.Ceiling(xGetTileCoordinates(Tile)),
-                Tile > 11 ? (int)Math.Ceiling(BoardSizey*yFractionOfBorder/2) : (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder)),
+                Tile > 11 ? (int)Math.Ceiling(BoardSizey * yFractionOfBorder / 2) : (int)Math.Ceiling(BoardSizey * (1 - yFractionOfBorder)),
                 (int)Math.Floor(BoardSizex * xFractionOfStrip),
                 (int)Math.Floor(BoardSizey * yFractionOfBorder / 2));
             using (Pen p = new Pen(ToS))
@@ -332,6 +332,15 @@ namespace Backgammon
                     info = "BLACK WON";
                 }
             }
+        }
+
+        // Resets graphics for new game
+        public void Reset(PictureBox WScore, PictureBox BScore, PictureBox BBar, PictureBox WBar, PictureBox TurnBox, int color)
+        {
+            ClearPictures(WScore, BScore, BBar, WBar);
+            ClearSelect();
+            ClearInfo();
+            RenderTurn(TurnBox, color);
         }
     }
 }
